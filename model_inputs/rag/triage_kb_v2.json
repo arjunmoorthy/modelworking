@@ -1,0 +1,2197 @@
+{
+  "version": "kb.v2",
+  "last_reviewed": "2025-08-24",
+  "reviewer": "CLINICIAN_NAME",
+  "scoring": {
+    "tau": 0.4,
+    "native_bonus": 0.03,
+    "burden_weight": 0.0
+  },
+  "templates": {
+    "presence": {
+      "response": "boolean",
+      "stem": "Are you experiencing {symptom} right now?"
+    },
+    "severity_bins": {
+      "response": "categorical",
+      "stem": "How severe is your {symptom} right now?",
+      "options_ref": "severity_4"
+    },
+    "count_24h": {
+      "response": "number",
+      "stem": "How many times in the last 24 hours?"
+    },
+    "duration_days": {
+      "response": "number",
+      "stem": "How many days has this been going on?"
+    },
+    "intake_bins": {
+      "response": "categorical",
+      "stem": "About how much of your usual food and fluids are you taking today?",
+      "options_ref": "intake_4"
+    },
+    "boolean_generic": {
+      "response": "boolean",
+      "stem": "{question_text}"
+    },
+    "multi_generic": {
+      "response": "categorical_multi",
+      "stem": "{question_text}",
+      "options_ref": "{options_ref}"
+    },
+    "number_generic": {
+      "response": "number",
+      "stem": "{question_text}"
+    }
+  },
+  "option_sets": {
+    "yes_no": [
+      "yes",
+      "no"
+    ],
+    "severity_4": [
+      "none",
+      "mild",
+      "moderate",
+      "severe"
+    ],
+    "intake_4": [
+      "most",
+      "about half",
+      "less than half",
+      "almost nothing"
+    ],
+    "stool_features": [
+      "black",
+      "bloody",
+      "mucus",
+      "normal",
+      "other"
+    ]
+  },
+  "symptoms": [
+    {
+      "id": "diarrhea",
+      "dedupe_policy": "one_per_concept",
+      "attributes": [
+        {
+          "attr": "loose_stools_per_day",
+          "phase_hint": "short",
+          "concept_id": "diarrhea_severity_core",
+          "utility": {
+            "base_info_gain": 1.0,
+            "burden_cost": 0.1
+          },
+          "fallback_template": {
+            "use": "count_24h"
+          },
+          "eligibility": {
+            "min_severity": "none"
+          }
+        },
+        {
+          "attr": "stool_contains",
+          "phase_hint": "short",
+          "concept_id": "gi_bleeding",
+          "utility": {
+            "base_info_gain": 1.0,
+            "burden_cost": 0.15
+          },
+          "fallback_template": {
+            "use": "multi_generic",
+            "vars": {
+              "question_text": "Which of these describe your stool today?",
+              "options_ref": "stool_features"
+            }
+          }
+        },
+        {
+          "attr": "abdominal_pain_presence",
+          "phase_hint": "short",
+          "concept_id": "abdominal_pain_cluster",
+          "utility": {
+            "base_info_gain": 1.0,
+            "burden_cost": 0.1
+          },
+          "fallback_template": {
+            "use": "boolean_generic",
+            "vars": {
+              "question_text": "Do you have abdominal pain?"
+            }
+          },
+          "eligibility": {
+            "min_severity": "severe"
+          }
+        },
+        {
+          "attr": "oral_intake_pct",
+          "phase_hint": "short",
+          "concept_id": "dehydration_cluster",
+          "utility": {
+            "base_info_gain": 1.0,
+            "burden_cost": 0.15
+          },
+          "fallback_template": {
+            "use": "intake_bins"
+          },
+          "eligibility": {
+            "min_severity": "severe"
+          }
+        },
+        {
+          "attr": "temp_f",
+          "phase_hint": "short",
+          "concept_id": "infection_cluster",
+          "utility": {
+            "base_info_gain": 1.0,
+            "burden_cost": 0.1
+          },
+          "fallback_template": {
+            "use": "number_generic",
+            "vars": {
+              "question_text": "What is your temp f?"
+            }
+          },
+          "eligibility": {
+            "min_severity": "severe"
+          }
+        },
+        {
+          "attr": "urine_output_pct",
+          "phase_hint": "long",
+          "concept_id": "dehydration_cluster",
+          "utility": {
+            "base_info_gain": 0.6,
+            "burden_cost": 0.15
+          },
+          "fallback_template": {
+            "use": "multi_generic",
+            "vars": {
+              "question_text": "In the last 12 hours, how does your urine amount compare to usual?",
+              "options_ref": "intake_4"
+            }
+          },
+          "eligibility": {
+            "min_severity": "severe"
+          }
+        },
+        {
+          "attr": "thirst_presence",
+          "phase_hint": "long",
+          "concept_id": "dehydration_cluster",
+          "utility": {
+            "base_info_gain": 0.6,
+            "burden_cost": 0.1
+          },
+          "fallback_template": {
+            "use": "boolean_generic",
+            "vars": {
+              "question_text": "Do you have thirst?"
+            }
+          },
+          "eligibility": {
+            "min_severity": "severe"
+          }
+        },
+        {
+          "attr": "lightheaded_presence",
+          "phase_hint": "long",
+          "concept_id": "dehydration_cluster",
+          "utility": {
+            "base_info_gain": 0.6,
+            "burden_cost": 0.1
+          },
+          "fallback_template": {
+            "use": "boolean_generic",
+            "vars": {
+              "question_text": "Do you have lightheaded?"
+            }
+          },
+          "eligibility": {
+            "min_severity": "severe"
+          }
+        },
+        {
+          "attr": "skin_turgor_decreased",
+          "phase_hint": "long",
+          "concept_id": "dehydration_cluster",
+          "utility": {
+            "base_info_gain": 0.6,
+            "burden_cost": 0.15
+          },
+          "fallback_template": {
+            "use": "boolean_generic",
+            "vars": {
+              "question_text": "Do you have skin turgor decreased?"
+            }
+          },
+          "eligibility": {
+            "min_severity": "severe"
+          }
+        },
+        {
+          "attr": "orthostatic_dizziness_presence",
+          "phase_hint": "long",
+          "concept_id": "dehydration_cluster",
+          "utility": {
+            "base_info_gain": 0.6,
+            "burden_cost": 0.2
+          },
+          "fallback_template": {
+            "use": "boolean_generic",
+            "vars": {
+              "question_text": "Do you have orthostatic dizziness?"
+            }
+          },
+          "eligibility": {
+            "min_severity": "severe"
+          }
+        },
+        {
+          "attr": "sunken_eyes_presence",
+          "phase_hint": "long",
+          "concept_id": "dehydration_cluster",
+          "utility": {
+            "base_info_gain": 0.6,
+            "burden_cost": 0.1
+          },
+          "fallback_template": {
+            "use": "boolean_generic",
+            "vars": {
+              "question_text": "Do you have sunken eyes?"
+            }
+          },
+          "eligibility": {
+            "min_severity": "severe"
+          }
+        },
+        {
+          "attr": "days_in_a_row",
+          "phase_hint": "long",
+          "concept_id": "days_in_a_row",
+          "utility": {
+            "base_info_gain": 0.6,
+            "burden_cost": 0.15
+          },
+          "fallback_template": {
+            "use": "duration_days"
+          },
+          "eligibility": {
+            "min_severity": "severe"
+          }
+        },
+        {
+          "attr": "antidiarrheal_taken",
+          "phase_hint": "long",
+          "concept_id": "antidiarrheal_taken",
+          "utility": {
+            "base_info_gain": 0.6,
+            "burden_cost": 0.15
+          },
+          "fallback_template": {
+            "use": "boolean_generic",
+            "vars": {
+              "question_text": "Do you have antidiarrheal taken?"
+            }
+          },
+          "eligibility": {
+            "min_severity": "severe"
+          }
+        },
+        {
+          "attr": "weight_change_lbs_since_onset",
+          "phase_hint": "long",
+          "concept_id": "weight_change_lbs_since_onset",
+          "utility": {
+            "base_info_gain": 0.6,
+            "burden_cost": 0.15
+          },
+          "fallback_template": {
+            "use": "number_generic",
+            "vars": {
+              "question_text": "What is your weight change lbs since onset?"
+            }
+          },
+          "eligibility": {
+            "min_severity": "severe"
+          }
+        }
+      ]
+    },
+    {
+      "id": "fever",
+      "dedupe_policy": "one_per_concept",
+      "attributes": [
+        {
+          "attr": "temp_f",
+          "phase_hint": "short",
+          "concept_id": "fever_core",
+          "utility": {
+            "base_info_gain": 1.0,
+            "burden_cost": 0.1
+          },
+          "fallback_template": {
+            "use": "number_generic",
+            "vars": {
+              "question_text": "What is your temp f?"
+            }
+          }
+        },
+        {
+          "attr": "mental_status_change",
+          "phase_hint": "short",
+          "concept_id": "sepsis_cluster",
+          "utility": {
+            "base_info_gain": 1.0,
+            "burden_cost": 0.15
+          },
+          "fallback_template": {
+            "use": "boolean_generic",
+            "vars": {
+              "question_text": "Do you have mental status change?"
+            }
+          }
+        },
+        {
+          "attr": "respiratory_difficulty",
+          "phase_hint": "short",
+          "concept_id": "sepsis_cluster",
+          "utility": {
+            "base_info_gain": 1.0,
+            "burden_cost": 0.1
+          },
+          "fallback_template": {
+            "use": "boolean_generic",
+            "vars": {
+              "question_text": "Do you have respiratory difficulty?"
+            }
+          }
+        },
+        {
+          "attr": "wheezing",
+          "phase_hint": "short",
+          "concept_id": "sepsis_cluster",
+          "utility": {
+            "base_info_gain": 1.0,
+            "burden_cost": 0.1
+          },
+          "fallback_template": {
+            "use": "boolean_generic",
+            "vars": {
+              "question_text": "Do you have wheezing?"
+            }
+          }
+        },
+        {
+          "attr": "difficulty_swallowing",
+          "phase_hint": "short",
+          "concept_id": "sepsis_cluster",
+          "utility": {
+            "base_info_gain": 1.0,
+            "burden_cost": 0.1
+          },
+          "fallback_template": {
+            "use": "boolean_generic",
+            "vars": {
+              "question_text": "Do you have difficulty swallowing?"
+            }
+          }
+        },
+        {
+          "attr": "decreased_urine_output",
+          "phase_hint": "short",
+          "concept_id": "sepsis_cluster",
+          "utility": {
+            "base_info_gain": 1.0,
+            "burden_cost": 0.15
+          },
+          "fallback_template": {
+            "use": "multi_generic",
+            "vars": {
+              "question_text": "In the last 12 hours, how does your urine amount compare to usual?",
+              "options_ref": "intake_4"
+            }
+          }
+        },
+        {
+          "attr": "sunken_eyes_presence",
+          "phase_hint": "short",
+          "concept_id": "sepsis_cluster",
+          "utility": {
+            "base_info_gain": 1.0,
+            "burden_cost": 0.1
+          },
+          "fallback_template": {
+            "use": "boolean_generic",
+            "vars": {
+              "question_text": "Do you have sunken eyes?"
+            }
+          }
+        },
+        {
+          "attr": "excessive_thirst",
+          "phase_hint": "short",
+          "concept_id": "sepsis_cluster",
+          "utility": {
+            "base_info_gain": 1.0,
+            "burden_cost": 0.15
+          },
+          "fallback_template": {
+            "use": "boolean_generic",
+            "vars": {
+              "question_text": "Do you have excessive thirst?"
+            }
+          }
+        },
+        {
+          "attr": "dry_mouth",
+          "phase_hint": "short",
+          "concept_id": "sepsis_cluster",
+          "utility": {
+            "base_info_gain": 1.0,
+            "burden_cost": 0.15
+          },
+          "fallback_template": {
+            "use": "boolean_generic",
+            "vars": {
+              "question_text": "Do you have dry mouth?"
+            }
+          }
+        },
+        {
+          "attr": "skin_turgor_decreased",
+          "phase_hint": "short",
+          "concept_id": "sepsis_cluster",
+          "utility": {
+            "base_info_gain": 1.0,
+            "burden_cost": 0.15
+          },
+          "fallback_template": {
+            "use": "boolean_generic",
+            "vars": {
+              "question_text": "Do you have skin turgor decreased?"
+            }
+          }
+        },
+        {
+          "attr": "lightheaded_presence",
+          "phase_hint": "short",
+          "concept_id": "sepsis_cluster",
+          "utility": {
+            "base_info_gain": 1.0,
+            "burden_cost": 0.1
+          },
+          "fallback_template": {
+            "use": "boolean_generic",
+            "vars": {
+              "question_text": "Do you have lightheaded?"
+            }
+          }
+        },
+        {
+          "attr": "pale_cold_moist_skin",
+          "phase_hint": "short",
+          "concept_id": "sepsis_cluster",
+          "utility": {
+            "base_info_gain": 1.0,
+            "burden_cost": 0.15
+          },
+          "fallback_template": {
+            "use": "boolean_generic",
+            "vars": {
+              "question_text": "Do you have pale cold moist skin?"
+            }
+          }
+        },
+        {
+          "attr": "rapid_pulse",
+          "phase_hint": "short",
+          "concept_id": "sepsis_cluster",
+          "utility": {
+            "base_info_gain": 1.0,
+            "burden_cost": 0.15
+          },
+          "fallback_template": {
+            "use": "boolean_generic",
+            "vars": {
+              "question_text": "Do you have rapid pulse?"
+            }
+          }
+        },
+        {
+          "attr": "mucositis_presence",
+          "phase_hint": "long",
+          "concept_id": "infection_cluster",
+          "utility": {
+            "base_info_gain": 0.6,
+            "burden_cost": 0.1
+          },
+          "fallback_template": {
+            "use": "boolean_generic",
+            "vars": {
+              "question_text": "Do you have mucositis?"
+            }
+          },
+          "eligibility": {
+            "min_severity": "severe"
+          }
+        },
+        {
+          "attr": "sore_throat_presence",
+          "phase_hint": "long",
+          "concept_id": "infection_cluster",
+          "utility": {
+            "base_info_gain": 0.6,
+            "burden_cost": 0.1
+          },
+          "fallback_template": {
+            "use": "boolean_generic",
+            "vars": {
+              "question_text": "Do you have sore throat?"
+            }
+          },
+          "eligibility": {
+            "min_severity": "severe"
+          }
+        },
+        {
+          "attr": "cough_presence",
+          "phase_hint": "long",
+          "concept_id": "infection_cluster",
+          "utility": {
+            "base_info_gain": 0.6,
+            "burden_cost": 0.1
+          },
+          "fallback_template": {
+            "use": "boolean_generic",
+            "vars": {
+              "question_text": "Do you have cough?"
+            }
+          },
+          "eligibility": {
+            "min_severity": "severe"
+          }
+        },
+        {
+          "attr": "diarrhea_presence",
+          "phase_hint": "long",
+          "concept_id": "infection_cluster",
+          "utility": {
+            "base_info_gain": 0.6,
+            "burden_cost": 0.1
+          },
+          "fallback_template": {
+            "use": "boolean_generic",
+            "vars": {
+              "question_text": "Do you have diarrhea?"
+            }
+          },
+          "eligibility": {
+            "min_severity": "severe"
+          }
+        },
+        {
+          "attr": "urination_pain_presence",
+          "phase_hint": "long",
+          "concept_id": "infection_cluster",
+          "utility": {
+            "base_info_gain": 0.6,
+            "burden_cost": 0.1
+          },
+          "fallback_template": {
+            "use": "boolean_generic",
+            "vars": {
+              "question_text": "Do you have urination pain?"
+            }
+          },
+          "eligibility": {
+            "min_severity": "severe"
+          }
+        },
+        {
+          "attr": "catheter_site_redness_draining",
+          "phase_hint": "long",
+          "concept_id": "infection_cluster",
+          "utility": {
+            "base_info_gain": 0.6,
+            "burden_cost": 0.15
+          },
+          "fallback_template": {
+            "use": "boolean_generic",
+            "vars": {
+              "question_text": "Do you have catheter site redness draining?"
+            }
+          },
+          "eligibility": {
+            "min_severity": "severe"
+          }
+        }
+      ]
+    },
+    {
+      "id": "bleeding",
+      "dedupe_policy": "one_per_concept",
+      "attributes": [
+        {
+          "attr": "penetrating_wound",
+          "phase_hint": "short",
+          "concept_id": "trauma_cluster",
+          "utility": {
+            "base_info_gain": 1.0,
+            "burden_cost": 0.15
+          },
+          "fallback_template": {
+            "use": "boolean_generic",
+            "vars": {
+              "question_text": "Do you have penetrating wound?"
+            }
+          }
+        },
+        {
+          "attr": "unconsciousness",
+          "phase_hint": "short",
+          "concept_id": "shock_cluster",
+          "utility": {
+            "base_info_gain": 1.0,
+            "burden_cost": 0.15
+          },
+          "fallback_template": {
+            "use": "boolean_generic",
+            "vars": {
+              "question_text": "Do you have unconsciousness?"
+            }
+          }
+        },
+        {
+          "attr": "lightheaded_presence",
+          "phase_hint": "short",
+          "concept_id": "shock_cluster",
+          "utility": {
+            "base_info_gain": 1.0,
+            "burden_cost": 0.1
+          },
+          "fallback_template": {
+            "use": "boolean_generic",
+            "vars": {
+              "question_text": "Do you have lightheaded?"
+            }
+          }
+        },
+        {
+          "attr": "pale_cold_moist_skin",
+          "phase_hint": "short",
+          "concept_id": "shock_cluster",
+          "utility": {
+            "base_info_gain": 1.0,
+            "burden_cost": 0.15
+          },
+          "fallback_template": {
+            "use": "boolean_generic",
+            "vars": {
+              "question_text": "Do you have pale cold moist skin?"
+            }
+          }
+        },
+        {
+          "attr": "thirst_presence",
+          "phase_hint": "short",
+          "concept_id": "shock_cluster",
+          "utility": {
+            "base_info_gain": 1.0,
+            "burden_cost": 0.1
+          },
+          "fallback_template": {
+            "use": "boolean_generic",
+            "vars": {
+              "question_text": "Do you have thirst?"
+            }
+          }
+        },
+        {
+          "attr": "rapid_pulse",
+          "phase_hint": "short",
+          "concept_id": "shock_cluster",
+          "utility": {
+            "base_info_gain": 1.0,
+            "burden_cost": 0.15
+          },
+          "fallback_template": {
+            "use": "boolean_generic",
+            "vars": {
+              "question_text": "Do you have rapid pulse?"
+            }
+          }
+        },
+        {
+          "attr": "spurting_bleed",
+          "phase_hint": "short",
+          "concept_id": "active_bleed_cluster",
+          "utility": {
+            "base_info_gain": 1.0,
+            "burden_cost": 0.15
+          },
+          "fallback_template": {
+            "use": "boolean_generic",
+            "vars": {
+              "question_text": "Do you have spurting bleed?"
+            }
+          }
+        },
+        {
+          "attr": "exposed_bone",
+          "phase_hint": "short",
+          "concept_id": "trauma_cluster",
+          "utility": {
+            "base_info_gain": 1.0,
+            "burden_cost": 0.15
+          },
+          "fallback_template": {
+            "use": "boolean_generic",
+            "vars": {
+              "question_text": "Do you have exposed bone?"
+            }
+          }
+        },
+        {
+          "attr": "bleeding_duration_minutes",
+          "phase_hint": "short",
+          "concept_id": "active_bleed_cluster",
+          "utility": {
+            "base_info_gain": 1.0,
+            "burden_cost": 0.15
+          },
+          "fallback_template": {
+            "use": "number_generic",
+            "vars": {
+              "question_text": "What is your bleeding duration minutes?"
+            }
+          }
+        },
+        {
+          "attr": "vaginal_pad_count_per_hour",
+          "phase_hint": "short",
+          "concept_id": "gyne_bleed_cluster",
+          "utility": {
+            "base_info_gain": 1.0,
+            "burden_cost": 0.1
+          },
+          "fallback_template": {
+            "use": "number_generic",
+            "vars": {
+              "question_text": "What is your vaginal pad count per hour?"
+            }
+          }
+        },
+        {
+          "attr": "gaping_wound",
+          "phase_hint": "short",
+          "concept_id": "bleeding_risk_cluster",
+          "utility": {
+            "base_info_gain": 1.0,
+            "burden_cost": 0.15
+          },
+          "fallback_template": {
+            "use": "boolean_generic",
+            "vars": {
+              "question_text": "Do you have gaping wound?"
+            }
+          }
+        },
+        {
+          "attr": "on_anticoagulants",
+          "phase_hint": "short",
+          "concept_id": "bleeding_risk_cluster",
+          "utility": {
+            "base_info_gain": 1.0,
+            "burden_cost": 0.15
+          },
+          "fallback_template": {
+            "use": "boolean_generic",
+            "vars": {
+              "question_text": "Do you have on anticoagulants?"
+            }
+          }
+        },
+        {
+          "attr": "bleeding_disorder_history",
+          "phase_hint": "short",
+          "concept_id": "bleeding_risk_cluster",
+          "utility": {
+            "base_info_gain": 1.0,
+            "burden_cost": 0.15
+          },
+          "fallback_template": {
+            "use": "boolean_generic",
+            "vars": {
+              "question_text": "Do you have bleeding disorder history?"
+            }
+          }
+        },
+        {
+          "attr": "thrombocytopenia_suspected",
+          "phase_hint": "short",
+          "concept_id": "bleeding_risk_cluster",
+          "utility": {
+            "base_info_gain": 1.0,
+            "burden_cost": 0.15
+          },
+          "fallback_template": {
+            "use": "boolean_generic",
+            "vars": {
+              "question_text": "Do you have thrombocytopenia suspected?"
+            }
+          }
+        },
+        {
+          "attr": "new_bruises_without_trauma",
+          "phase_hint": "long",
+          "concept_id": "thrombocytopenia_signs",
+          "utility": {
+            "base_info_gain": 0.3,
+            "burden_cost": 0.15
+          },
+          "fallback_template": {
+            "use": "boolean_generic",
+            "vars": {
+              "question_text": "Do you have new bruises without trauma?"
+            }
+          },
+          "eligibility": {
+            "min_severity": "none"
+          }
+        },
+        {
+          "attr": "petechiae_presence",
+          "phase_hint": "long",
+          "concept_id": "thrombocytopenia_signs",
+          "utility": {
+            "base_info_gain": 0.3,
+            "burden_cost": 0.1
+          },
+          "fallback_template": {
+            "use": "boolean_generic",
+            "vars": {
+              "question_text": "Do you have petechiae?"
+            }
+          },
+          "eligibility": {
+            "min_severity": "none"
+          }
+        }
+      ]
+    },
+    {
+      "id": "constipation",
+      "dedupe_policy": "one_per_concept",
+      "attributes": [
+        {
+          "attr": "abdominal_pain_severity",
+          "phase_hint": "short",
+          "concept_id": "abdomen_complication_cluster",
+          "utility": {
+            "base_info_gain": 1.0,
+            "burden_cost": 0.1
+          },
+          "fallback_template": {
+            "use": "severity_bins",
+            "vars": {
+              "symptom": "constipation"
+            }
+          }
+        },
+        {
+          "attr": "vomiting_bitter_emesis",
+          "phase_hint": "short",
+          "concept_id": "gi_obstruction_cluster",
+          "utility": {
+            "base_info_gain": 1.0,
+            "burden_cost": 0.15
+          },
+          "fallback_template": {
+            "use": "boolean_generic",
+            "vars": {
+              "question_text": "Do you have vomiting bitter emesis?"
+            }
+          }
+        },
+        {
+          "attr": "rectal_bleeding_significant",
+          "phase_hint": "short",
+          "concept_id": "gi_bleeding",
+          "utility": {
+            "base_info_gain": 1.0,
+            "burden_cost": 0.15
+          },
+          "fallback_template": {
+            "use": "boolean_generic",
+            "vars": {
+              "question_text": "Do you have rectal bleeding significant?"
+            }
+          }
+        },
+        {
+          "attr": "days_since_last_bowel_movement",
+          "phase_hint": "short",
+          "concept_id": "constipation_severity_core",
+          "utility": {
+            "base_info_gain": 0.6,
+            "burden_cost": 0.15
+          },
+          "fallback_template": {
+            "use": "duration_days"
+          },
+          "eligibility": {
+            "min_severity": "severe"
+          }
+        },
+        {
+          "attr": "recent_surgery_or_injury",
+          "phase_hint": "long",
+          "concept_id": "complication_risk_cluster",
+          "utility": {
+            "base_info_gain": 0.6,
+            "burden_cost": 0.15
+          },
+          "fallback_template": {
+            "use": "boolean_generic",
+            "vars": {
+              "question_text": "Do you have recent surgery or injury?"
+            }
+          },
+          "eligibility": {
+            "min_severity": "severe"
+          }
+        },
+        {
+          "attr": "history_of_diverticulitis_with_fever",
+          "phase_hint": "long",
+          "concept_id": "complication_risk_cluster",
+          "utility": {
+            "base_info_gain": 0.6,
+            "burden_cost": 0.15
+          },
+          "fallback_template": {
+            "use": "boolean_generic",
+            "vars": {
+              "question_text": "Do you have history of diverticulitis with fever?"
+            }
+          },
+          "eligibility": {
+            "min_severity": "severe"
+          }
+        },
+        {
+          "attr": "fever_duration_hours_unknown_cause",
+          "phase_hint": "long",
+          "concept_id": "complication_risk_cluster",
+          "utility": {
+            "base_info_gain": 0.6,
+            "burden_cost": 0.15
+          },
+          "fallback_template": {
+            "use": "number_generic",
+            "vars": {
+              "question_text": "What is your fever duration hours unknown cause?"
+            }
+          },
+          "eligibility": {
+            "min_severity": "severe"
+          }
+        },
+        {
+          "attr": "inability_to_pass_gas",
+          "phase_hint": "long",
+          "concept_id": "complication_risk_cluster",
+          "utility": {
+            "base_info_gain": 0.6,
+            "burden_cost": 0.15
+          },
+          "fallback_template": {
+            "use": "boolean_generic",
+            "vars": {
+              "question_text": "Do you have inability to pass gas?"
+            }
+          },
+          "eligibility": {
+            "min_severity": "severe"
+          }
+        },
+        {
+          "attr": "dry_hard_stools",
+          "phase_hint": "long",
+          "concept_id": "constipation_context",
+          "utility": {
+            "base_info_gain": 0.3,
+            "burden_cost": 0.15
+          },
+          "fallback_template": {
+            "use": "boolean_generic",
+            "vars": {
+              "question_text": "Do you have dry hard stools?"
+            }
+          },
+          "eligibility": {
+            "min_severity": "none"
+          }
+        },
+        {
+          "attr": "pain_with_bowel_movement",
+          "phase_hint": "long",
+          "concept_id": "constipation_context",
+          "utility": {
+            "base_info_gain": 0.3,
+            "burden_cost": 0.15
+          },
+          "fallback_template": {
+            "use": "boolean_generic",
+            "vars": {
+              "question_text": "Do you have pain with bowel movement?"
+            }
+          },
+          "eligibility": {
+            "min_severity": "none"
+          }
+        },
+        {
+          "attr": "recent_change_in_stools",
+          "phase_hint": "long",
+          "concept_id": "constipation_context",
+          "utility": {
+            "base_info_gain": 0.3,
+            "burden_cost": 0.15
+          },
+          "fallback_template": {
+            "use": "boolean_generic",
+            "vars": {
+              "question_text": "Do you have recent change in stools?"
+            }
+          },
+          "eligibility": {
+            "min_severity": "none"
+          }
+        },
+        {
+          "attr": "recent_med_change",
+          "phase_hint": "long",
+          "concept_id": "constipation_context",
+          "utility": {
+            "base_info_gain": 0.3,
+            "burden_cost": 0.15
+          },
+          "fallback_template": {
+            "use": "boolean_generic",
+            "vars": {
+              "question_text": "Do you have recent med change?"
+            }
+          },
+          "eligibility": {
+            "min_severity": "none"
+          }
+        },
+        {
+          "attr": "decreased_activity",
+          "phase_hint": "long",
+          "concept_id": "constipation_context",
+          "utility": {
+            "base_info_gain": 0.3,
+            "burden_cost": 0.15
+          },
+          "fallback_template": {
+            "use": "boolean_generic",
+            "vars": {
+              "question_text": "Do you have decreased activity?"
+            }
+          },
+          "eligibility": {
+            "min_severity": "none"
+          }
+        },
+        {
+          "attr": "decreased_fiber_or_fluids",
+          "phase_hint": "long",
+          "concept_id": "constipation_context",
+          "utility": {
+            "base_info_gain": 0.3,
+            "burden_cost": 0.15
+          },
+          "fallback_template": {
+            "use": "boolean_generic",
+            "vars": {
+              "question_text": "Do you have decreased fiber or fluids?"
+            }
+          },
+          "eligibility": {
+            "min_severity": "none"
+          }
+        }
+      ]
+    },
+    {
+      "id": "pain",
+      "dedupe_policy": "one_per_concept",
+      "attributes": [
+        {
+          "attr": "urinary_retention",
+          "phase_hint": "short",
+          "concept_id": "urologic_emergency_cluster",
+          "utility": {
+            "base_info_gain": 1.0,
+            "burden_cost": 0.15
+          },
+          "fallback_template": {
+            "use": "boolean_generic",
+            "vars": {
+              "question_text": "Do you have urinary retention?"
+            }
+          }
+        },
+        {
+          "attr": "acute_severe_flank_pain",
+          "phase_hint": "short",
+          "concept_id": "urologic_emergency_cluster",
+          "utility": {
+            "base_info_gain": 1.0,
+            "burden_cost": 0.15
+          },
+          "fallback_template": {
+            "use": "boolean_generic",
+            "vars": {
+              "question_text": "Do you have acute severe flank pain?"
+            }
+          }
+        },
+        {
+          "attr": "lower_extremity_weakness",
+          "phase_hint": "short",
+          "concept_id": "urologic_emergency_cluster",
+          "utility": {
+            "base_info_gain": 1.0,
+            "burden_cost": 0.15
+          },
+          "fallback_template": {
+            "use": "boolean_generic",
+            "vars": {
+              "question_text": "Do you have lower extremity weakness?"
+            }
+          }
+        },
+        {
+          "attr": "temp_f",
+          "phase_hint": "short",
+          "concept_id": "infection_cluster",
+          "utility": {
+            "base_info_gain": 1.0,
+            "burden_cost": 0.1
+          },
+          "fallback_template": {
+            "use": "number_generic",
+            "vars": {
+              "question_text": "What is your temp f?"
+            }
+          }
+        },
+        {
+          "attr": "chills",
+          "phase_hint": "short",
+          "concept_id": "sepsis_cluster",
+          "utility": {
+            "base_info_gain": 1.0,
+            "burden_cost": 0.15
+          },
+          "fallback_template": {
+            "use": "boolean_generic",
+            "vars": {
+              "question_text": "Do you have chills?"
+            }
+          }
+        },
+        {
+          "attr": "malaise",
+          "phase_hint": "short",
+          "concept_id": "sepsis_cluster",
+          "utility": {
+            "base_info_gain": 1.0,
+            "burden_cost": 0.15
+          },
+          "fallback_template": {
+            "use": "boolean_generic",
+            "vars": {
+              "question_text": "Do you have malaise?"
+            }
+          }
+        },
+        {
+          "attr": "rigors",
+          "phase_hint": "short",
+          "concept_id": "sepsis_cluster",
+          "utility": {
+            "base_info_gain": 1.0,
+            "burden_cost": 0.15
+          },
+          "fallback_template": {
+            "use": "boolean_generic",
+            "vars": {
+              "question_text": "Do you have rigors?"
+            }
+          }
+        },
+        {
+          "attr": "hematuria",
+          "phase_hint": "long",
+          "concept_id": "uti_cluster",
+          "utility": {
+            "base_info_gain": 0.6,
+            "burden_cost": 0.15
+          },
+          "fallback_template": {
+            "use": "boolean_generic",
+            "vars": {
+              "question_text": "Do you have hematuria?"
+            }
+          },
+          "eligibility": {
+            "min_severity": "severe"
+          }
+        },
+        {
+          "attr": "dysuria",
+          "phase_hint": "long",
+          "concept_id": "uti_cluster",
+          "utility": {
+            "base_info_gain": 0.6,
+            "burden_cost": 0.15
+          },
+          "fallback_template": {
+            "use": "boolean_generic",
+            "vars": {
+              "question_text": "Do you have dysuria?"
+            }
+          },
+          "eligibility": {
+            "min_severity": "severe"
+          }
+        },
+        {
+          "attr": "burning_with_urination",
+          "phase_hint": "long",
+          "concept_id": "uti_cluster",
+          "utility": {
+            "base_info_gain": 0.6,
+            "burden_cost": 0.15
+          },
+          "fallback_template": {
+            "use": "boolean_generic",
+            "vars": {
+              "question_text": "Do you have burning with urination?"
+            }
+          },
+          "eligibility": {
+            "min_severity": "severe"
+          }
+        },
+        {
+          "attr": "frequency",
+          "phase_hint": "long",
+          "concept_id": "uti_cluster",
+          "utility": {
+            "base_info_gain": 0.6,
+            "burden_cost": 0.15
+          },
+          "fallback_template": {
+            "use": "boolean_generic",
+            "vars": {
+              "question_text": "Do you have frequency?"
+            }
+          },
+          "eligibility": {
+            "min_severity": "severe"
+          }
+        },
+        {
+          "attr": "nocturia",
+          "phase_hint": "long",
+          "concept_id": "uti_cluster",
+          "utility": {
+            "base_info_gain": 0.6,
+            "burden_cost": 0.15
+          },
+          "fallback_template": {
+            "use": "boolean_generic",
+            "vars": {
+              "question_text": "Do you have nocturia?"
+            }
+          },
+          "eligibility": {
+            "min_severity": "severe"
+          }
+        },
+        {
+          "attr": "cloudy_malodorous_urine",
+          "phase_hint": "long",
+          "concept_id": "uti_cluster",
+          "utility": {
+            "base_info_gain": 0.6,
+            "burden_cost": 0.15
+          },
+          "fallback_template": {
+            "use": "boolean_generic",
+            "vars": {
+              "question_text": "Do you have cloudy malodorous urine?"
+            }
+          },
+          "eligibility": {
+            "min_severity": "severe"
+          }
+        },
+        {
+          "attr": "urinary_discharge",
+          "phase_hint": "long",
+          "concept_id": "uti_cluster",
+          "utility": {
+            "base_info_gain": 0.6,
+            "burden_cost": 0.15
+          },
+          "fallback_template": {
+            "use": "boolean_generic",
+            "vars": {
+              "question_text": "Do you have urinary discharge?"
+            }
+          },
+          "eligibility": {
+            "min_severity": "severe"
+          }
+        },
+        {
+          "attr": "suprapubic_pain",
+          "phase_hint": "long",
+          "concept_id": "uti_cluster",
+          "utility": {
+            "base_info_gain": 0.6,
+            "burden_cost": 0.15
+          },
+          "fallback_template": {
+            "use": "boolean_generic",
+            "vars": {
+              "question_text": "Do you have suprapubic pain?"
+            }
+          },
+          "eligibility": {
+            "min_severity": "severe"
+          }
+        },
+        {
+          "attr": "unable_to_urinate_hours",
+          "phase_hint": "long",
+          "concept_id": "uti_cluster",
+          "utility": {
+            "base_info_gain": 0.6,
+            "burden_cost": 0.15
+          },
+          "fallback_template": {
+            "use": "number_generic",
+            "vars": {
+              "question_text": "What is your unable to urinate hours?"
+            }
+          },
+          "eligibility": {
+            "min_severity": "severe"
+          }
+        },
+        {
+          "attr": "flu_like_duration_hours",
+          "phase_hint": "long",
+          "concept_id": "uti_cluster",
+          "utility": {
+            "base_info_gain": 0.6,
+            "burden_cost": 0.15
+          },
+          "fallback_template": {
+            "use": "number_generic",
+            "vars": {
+              "question_text": "What is your flu like duration hours?"
+            }
+          },
+          "eligibility": {
+            "min_severity": "severe"
+          }
+        },
+        {
+          "attr": "bcg_recent_adverse_symptoms",
+          "phase_hint": "long",
+          "concept_id": "uti_cluster",
+          "utility": {
+            "base_info_gain": 0.6,
+            "burden_cost": 0.15
+          },
+          "fallback_template": {
+            "use": "boolean_generic",
+            "vars": {
+              "question_text": "Do you have bcg recent adverse symptoms?"
+            }
+          },
+          "eligibility": {
+            "min_severity": "severe"
+          }
+        }
+      ]
+    },
+    {
+      "id": "fatigue",
+      "dedupe_policy": "one_per_concept",
+      "attributes": [
+        {
+          "attr": "unable_to_wake_up",
+          "phase_hint": "short",
+          "concept_id": "neuro_emergency",
+          "utility": {
+            "base_info_gain": 1.0,
+            "burden_cost": 0.15
+          },
+          "fallback_template": {
+            "use": "boolean_generic",
+            "vars": {
+              "question_text": "Do you have unable to wake up?"
+            }
+          }
+        },
+        {
+          "attr": "fatigue_rating",
+          "phase_hint": "short",
+          "concept_id": "fatigue_core",
+          "utility": {
+            "base_info_gain": 0.6,
+            "burden_cost": 0.15
+          },
+          "fallback_template": {
+            "use": "severity_bins",
+            "vars": {
+              "symptom": "fatigue"
+            }
+          },
+          "eligibility": {
+            "min_severity": "moderate"
+          }
+        },
+        {
+          "attr": "dizziness_presence",
+          "phase_hint": "long",
+          "concept_id": "orthostasis_cluster",
+          "utility": {
+            "base_info_gain": 0.6,
+            "burden_cost": 0.1
+          },
+          "fallback_template": {
+            "use": "boolean_generic",
+            "vars": {
+              "question_text": "Do you have dizziness?"
+            }
+          },
+          "eligibility": {
+            "min_severity": "moderate"
+          }
+        },
+        {
+          "attr": "temp_f",
+          "phase_hint": "short",
+          "concept_id": "infection_cluster",
+          "utility": {
+            "base_info_gain": 1.0,
+            "burden_cost": 0.1
+          },
+          "fallback_template": {
+            "use": "number_generic",
+            "vars": {
+              "question_text": "What is your temp f?"
+            }
+          },
+          "eligibility": {
+            "min_severity": "moderate"
+          }
+        }
+      ]
+    },
+    {
+      "id": "no_appetite",
+      "dedupe_policy": "one_per_concept",
+      "attributes": [
+        {
+          "attr": "oral_intake_days_none",
+          "phase_hint": "short",
+          "concept_id": "intake_cluster",
+          "utility": {
+            "base_info_gain": 1.0,
+            "burden_cost": 0.15
+          },
+          "fallback_template": {
+            "use": "intake_bins"
+          },
+          "eligibility": {
+            "min_severity": "severe"
+          }
+        },
+        {
+          "attr": "orthostatic_dizziness_presence",
+          "phase_hint": "short",
+          "concept_id": "dehydration_cluster",
+          "utility": {
+            "base_info_gain": 1.0,
+            "burden_cost": 0.2
+          },
+          "fallback_template": {
+            "use": "boolean_generic",
+            "vars": {
+              "question_text": "Do you have orthostatic dizziness?"
+            }
+          },
+          "eligibility": {
+            "min_severity": "severe"
+          }
+        },
+        {
+          "attr": "signs_of_dehydration",
+          "phase_hint": "short",
+          "concept_id": "dehydration_cluster",
+          "utility": {
+            "base_info_gain": 1.0,
+            "burden_cost": 0.15
+          },
+          "fallback_template": {
+            "use": "boolean_generic",
+            "vars": {
+              "question_text": "Do you have signs of dehydration?"
+            }
+          },
+          "eligibility": {
+            "min_severity": "severe"
+          }
+        },
+        {
+          "attr": "collapse_syncope",
+          "phase_hint": "short",
+          "concept_id": "dehydration_cluster",
+          "utility": {
+            "base_info_gain": 1.0,
+            "burden_cost": 0.15
+          },
+          "fallback_template": {
+            "use": "boolean_generic",
+            "vars": {
+              "question_text": "Do you have collapse syncope?"
+            }
+          },
+          "eligibility": {
+            "min_severity": "severe"
+          }
+        },
+        {
+          "attr": "weight_loss_percent_1m",
+          "phase_hint": "short",
+          "concept_id": "weight_loss_cluster",
+          "utility": {
+            "base_info_gain": 0.6,
+            "burden_cost": 0.15
+          },
+          "fallback_template": {
+            "use": "number_generic",
+            "vars": {
+              "question_text": "What is your weight loss percent 1m?"
+            }
+          },
+          "eligibility": {
+            "min_severity": "mild"
+          }
+        }
+      ]
+    },
+    {
+      "id": "nausea",
+      "dedupe_policy": "one_per_concept",
+      "attributes": [
+        {
+          "attr": "ctcae_nausea_grade",
+          "phase_hint": "short",
+          "concept_id": "nausea_core",
+          "utility": {
+            "base_info_gain": 1.0,
+            "burden_cost": 0.1
+          },
+          "fallback_template": {
+            "use": "number_generic",
+            "vars": {
+              "question_text": "What is your ctcae nausea grade?"
+            }
+          },
+          "eligibility": {
+            "min_severity": "none"
+          }
+        },
+        {
+          "attr": "unable_to_eat_or_drink_hours",
+          "phase_hint": "short",
+          "concept_id": "intake_cluster",
+          "utility": {
+            "base_info_gain": 1.0,
+            "burden_cost": 0.1
+          },
+          "fallback_template": {
+            "use": "number_generic",
+            "vars": {
+              "question_text": "What is your unable to eat or drink hours?"
+            }
+          }
+        },
+        {
+          "attr": "antiemetic_change_ineffective_hours",
+          "phase_hint": "short",
+          "concept_id": "treatment_failure_cluster",
+          "utility": {
+            "base_info_gain": 0.9,
+            "burden_cost": 0.1
+          },
+          "fallback_template": {
+            "use": "number_generic",
+            "vars": {
+              "question_text": "What is your antiemetic change ineffective hours?"
+            }
+          }
+        },
+        {
+          "attr": "signs_of_dehydration",
+          "phase_hint": "short",
+          "concept_id": "dehydration_cluster",
+          "utility": {
+            "base_info_gain": 0.9,
+            "burden_cost": 0.1
+          },
+          "fallback_template": {
+            "use": "boolean_generic",
+            "vars": {
+              "question_text": "Do you have signs of dehydration?"
+            }
+          }
+        },
+        {
+          "attr": "decreased_urine_output_presence",
+          "phase_hint": "short",
+          "concept_id": "dehydration_cluster",
+          "utility": {
+            "base_info_gain": 0.7,
+            "burden_cost": 0.1
+          },
+          "fallback_template": {
+            "use": "multi_generic",
+            "vars": {
+              "question_text": "In the last 12 hours, how does your urine amount compare to usual?",
+              "options_ref": "intake_4"
+            }
+          }
+        },
+        {
+          "attr": "sunken_eyes_presence",
+          "phase_hint": "short",
+          "concept_id": "dehydration_cluster",
+          "utility": {
+            "base_info_gain": 0.6,
+            "burden_cost": 0.1
+          },
+          "fallback_template": {
+            "use": "boolean_generic",
+            "vars": {
+              "question_text": "Do you have sunken eyes?"
+            }
+          }
+        },
+        {
+          "attr": "orthostatic_dizziness_presence",
+          "phase_hint": "short",
+          "concept_id": "dehydration_cluster",
+          "utility": {
+            "base_info_gain": 0.6,
+            "burden_cost": 0.2
+          },
+          "fallback_template": {
+            "use": "boolean_generic",
+            "vars": {
+              "question_text": "Do you have orthostatic dizziness?"
+            }
+          }
+        },
+        {
+          "attr": "excessive_thirst_or_dry_mouth",
+          "phase_hint": "short",
+          "concept_id": "dehydration_cluster",
+          "utility": {
+            "base_info_gain": 0.6,
+            "burden_cost": 0.15
+          },
+          "fallback_template": {
+            "use": "boolean_generic",
+            "vars": {
+              "question_text": "Do you have excessive thirst or dry mouth?"
+            }
+          }
+        }
+      ]
+    },
+    {
+      "id": "vomiting",
+      "dedupe_policy": "one_per_concept",
+      "attributes": [
+        {
+          "attr": "vomit_count_24h",
+          "phase_hint": "short",
+          "concept_id": "vomiting_core",
+          "utility": {
+            "base_info_gain": 1.0,
+            "burden_cost": 0.1
+          },
+          "fallback_template": {
+            "use": "count_24h"
+          },
+          "eligibility": {
+            "min_severity": "none"
+          }
+        },
+        {
+          "attr": "ctcae_vomiting_grade",
+          "phase_hint": "short",
+          "concept_id": "vomiting_core",
+          "utility": {
+            "base_info_gain": 0.9,
+            "burden_cost": 0.1
+          },
+          "fallback_template": {
+            "use": "number_generic",
+            "vars": {
+              "question_text": "What is your ctcae vomiting grade?"
+            }
+          },
+          "eligibility": {
+            "min_severity": "none"
+          }
+        },
+        {
+          "attr": "decreased_urine_output_presence",
+          "phase_hint": "short",
+          "concept_id": "dehydration_cluster",
+          "utility": {
+            "base_info_gain": 0.7,
+            "burden_cost": 0.1
+          },
+          "fallback_template": {
+            "use": "multi_generic",
+            "vars": {
+              "question_text": "In the last 12 hours, how does your urine amount compare to usual?",
+              "options_ref": "intake_4"
+            }
+          }
+        },
+        {
+          "attr": "sunken_eyes_presence",
+          "phase_hint": "short",
+          "concept_id": "dehydration_cluster",
+          "utility": {
+            "base_info_gain": 0.6,
+            "burden_cost": 0.1
+          },
+          "fallback_template": {
+            "use": "boolean_generic",
+            "vars": {
+              "question_text": "Do you have sunken eyes?"
+            }
+          }
+        },
+        {
+          "attr": "orthostatic_dizziness_presence",
+          "phase_hint": "short",
+          "concept_id": "dehydration_cluster",
+          "utility": {
+            "base_info_gain": 0.6,
+            "burden_cost": 0.2
+          },
+          "fallback_template": {
+            "use": "boolean_generic",
+            "vars": {
+              "question_text": "Do you have orthostatic dizziness?"
+            }
+          }
+        },
+        {
+          "attr": "excessive_thirst_or_dry_mouth",
+          "phase_hint": "short",
+          "concept_id": "dehydration_cluster",
+          "utility": {
+            "base_info_gain": 0.6,
+            "burden_cost": 0.15
+          },
+          "fallback_template": {
+            "use": "boolean_generic",
+            "vars": {
+              "question_text": "Do you have excessive thirst or dry mouth?"
+            }
+          }
+        }
+      ]
+    },
+    {
+      "id": "mouth_sores",
+      "dedupe_policy": "one_per_concept",
+      "attributes": [
+        {
+          "attr": "severe_ulceration_or_inability_to_take_oral",
+          "phase_hint": "short",
+          "concept_id": "mucositis_cluster",
+          "utility": {
+            "base_info_gain": 0.9,
+            "burden_cost": 0.15
+          },
+          "fallback_template": {
+            "use": "boolean_generic",
+            "vars": {
+              "question_text": "Do you have severe ulceration or inability to take oral?"
+            }
+          }
+        },
+        {
+          "attr": "bleeding_from_mouth_minutes",
+          "phase_hint": "short",
+          "concept_id": "mucositis_bleed_cluster",
+          "utility": {
+            "base_info_gain": 0.8,
+            "burden_cost": 0.1
+          },
+          "fallback_template": {
+            "use": "number_generic",
+            "vars": {
+              "question_text": "What is your bleeding from mouth minutes?"
+            }
+          }
+        },
+        {
+          "attr": "painful_erythema_ulcers_swallowing_difficult",
+          "phase_hint": "short",
+          "concept_id": "mucositis_cluster",
+          "utility": {
+            "base_info_gain": 0.8,
+            "burden_cost": 0.15
+          },
+          "fallback_template": {
+            "use": "boolean_generic",
+            "vars": {
+              "question_text": "Do you have painful erythema ulcers swallowing difficult?"
+            }
+          },
+          "eligibility": {
+            "min_severity": "severe"
+          }
+        },
+        {
+          "attr": "white_patches_or_sticky_white_film",
+          "phase_hint": "short",
+          "concept_id": "candida_cluster",
+          "utility": {
+            "base_info_gain": 0.7,
+            "burden_cost": 0.15
+          },
+          "fallback_template": {
+            "use": "boolean_generic",
+            "vars": {
+              "question_text": "Do you have white patches or sticky white film?"
+            }
+          },
+          "eligibility": {
+            "min_severity": "severe"
+          }
+        },
+        {
+          "attr": "foul_odor_from_mouth",
+          "phase_hint": "short",
+          "concept_id": "infection_cluster",
+          "utility": {
+            "base_info_gain": 0.6,
+            "burden_cost": 0.1
+          },
+          "fallback_template": {
+            "use": "boolean_generic",
+            "vars": {
+              "question_text": "Do you have foul odor from mouth?"
+            }
+          },
+          "eligibility": {
+            "min_severity": "severe"
+          }
+        },
+        {
+          "attr": "temp_f",
+          "phase_hint": "short",
+          "concept_id": "infection_cluster",
+          "utility": {
+            "base_info_gain": 0.7,
+            "burden_cost": 0.1
+          },
+          "fallback_template": {
+            "use": "number_generic",
+            "vars": {
+              "question_text": "What is your temp f?"
+            }
+          },
+          "eligibility": {
+            "min_severity": "severe"
+          }
+        }
+      ]
+    },
+    {
+      "id": "skin_rash",
+      "dedupe_policy": "one_per_concept",
+      "attributes": [
+        {
+          "attr": "rash_systemic_redflags",
+          "phase_hint": "short",
+          "concept_id": "dermatologic_emergency",
+          "utility": {
+            "base_info_gain": 1.0,
+            "burden_cost": 0.15
+          },
+          "fallback_template": {
+            "use": "boolean_generic",
+            "vars": {
+              "question_text": "Do you have rash systemic redflags?"
+            }
+          }
+        },
+        {
+          "attr": "lesion_drainage_or_pus",
+          "phase_hint": "short",
+          "concept_id": "infection_cluster",
+          "utility": {
+            "base_info_gain": 0.7,
+            "burden_cost": 0.1
+          },
+          "fallback_template": {
+            "use": "boolean_generic",
+            "vars": {
+              "question_text": "Do you have lesion drainage or pus?"
+            }
+          },
+          "eligibility": {
+            "min_severity": "severe"
+          }
+        },
+        {
+          "attr": "suspected_drug_induced_rash",
+          "phase_hint": "short",
+          "concept_id": "drug_rash_cluster",
+          "utility": {
+            "base_info_gain": 0.8,
+            "burden_cost": 0.15
+          },
+          "fallback_template": {
+            "use": "boolean_generic",
+            "vars": {
+              "question_text": "Do you have suspected drug induced rash?"
+            }
+          },
+          "eligibility": {
+            "min_severity": "severe"
+          }
+        },
+        {
+          "attr": "viral_or_systemic_symptoms",
+          "phase_hint": "short",
+          "concept_id": "viral_exanthem_cluster",
+          "utility": {
+            "base_info_gain": 0.6,
+            "burden_cost": 0.15
+          },
+          "fallback_template": {
+            "use": "boolean_generic",
+            "vars": {
+              "question_text": "Do you have viral or systemic symptoms?"
+            }
+          },
+          "eligibility": {
+            "min_severity": "severe"
+          }
+        },
+        {
+          "attr": "therapy_related_rash_mild_stable",
+          "phase_hint": "long",
+          "concept_id": "oncoderm_homecare",
+          "utility": {
+            "base_info_gain": 0.4,
+            "burden_cost": 0.1
+          },
+          "fallback_template": {
+            "use": "boolean_generic",
+            "vars": {
+              "question_text": "Do you have therapy related rash mild stable?"
+            }
+          },
+          "eligibility": {
+            "min_severity": "none"
+          }
+        }
+      ]
+    },
+    {
+      "id": "urinary_problems",
+      "dedupe_policy": "one_per_concept",
+      "attributes": [
+        {
+          "attr": "urinary_retention",
+          "phase_hint": "short",
+          "concept_id": "urologic_emergency_cluster",
+          "utility": {
+            "base_info_gain": 1.0,
+            "burden_cost": 0.15
+          },
+          "fallback_template": {
+            "use": "boolean_generic",
+            "vars": {
+              "question_text": "Do you have urinary retention?"
+            }
+          }
+        },
+        {
+          "attr": "acute_severe_flank_pain",
+          "phase_hint": "short",
+          "concept_id": "urologic_emergency_cluster",
+          "utility": {
+            "base_info_gain": 0.9,
+            "burden_cost": 0.15
+          },
+          "fallback_template": {
+            "use": "boolean_generic",
+            "vars": {
+              "question_text": "Do you have acute severe flank pain?"
+            }
+          }
+        },
+        {
+          "attr": "lower_extremity_weakness",
+          "phase_hint": "short",
+          "concept_id": "spinal_cord_compression_cluster",
+          "utility": {
+            "base_info_gain": 0.9,
+            "burden_cost": 0.15
+          },
+          "fallback_template": {
+            "use": "boolean_generic",
+            "vars": {
+              "question_text": "Do you have lower extremity weakness?"
+            }
+          }
+        },
+        {
+          "attr": "burning_on_urination",
+          "phase_hint": "short",
+          "concept_id": "uti_cluster",
+          "utility": {
+            "base_info_gain": 0.6,
+            "burden_cost": 0.15
+          },
+          "fallback_template": {
+            "use": "boolean_generic",
+            "vars": {
+              "question_text": "Do you have burning on urination?"
+            }
+          },
+          "eligibility": {
+            "min_severity": "severe"
+          }
+        },
+        {
+          "attr": "hematuria",
+          "phase_hint": "short",
+          "concept_id": "uti_cluster",
+          "utility": {
+            "base_info_gain": 0.6,
+            "burden_cost": 0.15
+          },
+          "fallback_template": {
+            "use": "boolean_generic",
+            "vars": {
+              "question_text": "Do you have hematuria?"
+            }
+          },
+          "eligibility": {
+            "min_severity": "severe"
+          }
+        },
+        {
+          "attr": "urination_frequency",
+          "phase_hint": "short",
+          "concept_id": "uti_cluster",
+          "utility": {
+            "base_info_gain": 0.6,
+            "burden_cost": 0.15
+          },
+          "fallback_template": {
+            "use": "boolean_generic",
+            "vars": {
+              "question_text": "Do you have urination frequency?"
+            }
+          },
+          "eligibility": {
+            "min_severity": "severe"
+          }
+        },
+        {
+          "attr": "cloudy_malodorous_urine",
+          "phase_hint": "long",
+          "concept_id": "uti_cluster",
+          "utility": {
+            "base_info_gain": 0.5,
+            "burden_cost": 0.1
+          },
+          "fallback_template": {
+            "use": "boolean_generic",
+            "vars": {
+              "question_text": "Do you have cloudy malodorous urine?"
+            }
+          },
+          "eligibility": {
+            "min_severity": "severe"
+          }
+        },
+        {
+          "attr": "urinary_discharge",
+          "phase_hint": "long",
+          "concept_id": "uti_cluster",
+          "utility": {
+            "base_info_gain": 0.5,
+            "burden_cost": 0.1
+          },
+          "fallback_template": {
+            "use": "boolean_generic",
+            "vars": {
+              "question_text": "Do you have urinary discharge?"
+            }
+          },
+          "eligibility": {
+            "min_severity": "severe"
+          }
+        },
+        {
+          "attr": "suprapubic_pain",
+          "phase_hint": "long",
+          "concept_id": "uti_cluster",
+          "utility": {
+            "base_info_gain": 0.5,
+            "burden_cost": 0.1
+          },
+          "fallback_template": {
+            "use": "boolean_generic",
+            "vars": {
+              "question_text": "Do you have suprapubic pain?"
+            }
+          },
+          "eligibility": {
+            "min_severity": "severe"
+          }
+        }
+      ]
+    }
+  ]
+}

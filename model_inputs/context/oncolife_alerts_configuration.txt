@@ -1,0 +1,603 @@
+Oncolife Alerts Configuration:
+
+alerts:
+Immediate red‑flag overrides
+
+id: ALERT_TROUBLE_BREATHING
+symptom: trouble_breathing
+when: trouble_breathing == true
+override_to_grade: 4
+long_q_ids: []
+reason: "OncoLifeAlerts.docx: Trouble Breathing is an immediate alert"
+id: ALERT_CHEST_PAIN
+symptom: chest_pain
+when: chest_pain == true
+override_to_grade: 4
+long_q_ids: []
+reason: "OncoLifeAlerts.docx: Chest Pain is an immediate alert"
+id: ALERT_SIGNIFICANT_BLEEDING
+symptom: significant_bleeding
+when: bleeding_significant == true
+override_to_grade: 4
+long_q_ids: []
+reason: "OncoLifeAlerts.docx: Significant bleeding that won't stop with pressure"
+
+Dehydration alert
+
+id: ALERT_DEHYDRATION
+symptom: dehydration
+when: heart_rate > 100 or sbp < 100
+override_to_grade: 3
+long_q_ids:
+
+"What color is your urine?"
+"Is the amount of urine a lot less over the last 12 hours?"
+"Are you very thirsty or lightheaded?"
+"Do you know what your heart rate and blood pressure is? If so, please state."
+reason: "OncoLifeAlerts.docx: Dehydration if HR >100 or systolic BP <100"
+
+
+
+Fever
+
+id: ALERT_FEVER
+symptom: fever
+when: temp_f >= 100.4
+override_to_grade: 3
+long_q_ids:
+
+"Are you having any trouble breathing?"
+"Rapid heartbeat: is your heart rate above 100? Select all that apply: nausea, vomiting, abdominal pain, diarrhea, redness around the port, cough."
+"Do you feel dizzy, confused, or experience burning on urination? Select all that apply."
+"How much have you been able to eat or drink in the last 24 hours? Select the closest that applies: About the same as usual, less than half, almost nothing, I haven't eaten or had anything to drink."
+"Are you able to perform daily self care like bathing and dressing yourself?"
+reason: "OncoLifeAlerts.docx: Fever >100.4°F once or sustained >100.4°F for >1 h"
+
+
+
+Nausea
+
+id: ALERT_NAUSEA_INTAKE
+symptom: nausea
+when: oral_intake_pct <= 10
+override_to_grade: 3
+long_q_ids:
+
+"Have you vomited in the last 24 hours? If so, how many times?"
+"Are you experiencing abdominal pain or cramping?"
+"Are you experiencing any weight loss?"
+"Any fever > 100.4°F?"
+"What color is your urine?"
+"Is the amount of urine in the last 12 hours a lot less than your usual amount?"
+"Are you very thirsty?"
+"Are you lightheaded?"
+"Are you able to perform self care activities?"
+reason: "OncoLifeAlerts.docx: 24 h intake rated 'Almost nothing' or 'nothing'"
+
+
+id: ALERT_NAUSEA_SEVERE
+symptom: nausea
+when: nausea_rating == "severe"
+override_to_grade: 3
+long_q_ids: # same as above
+
+"Have you vomited in the last 24 hours? If so, how many times?"
+"Are you experiencing abdominal pain or cramping?"
+"Any weight loss?"
+"Any fever > 100.4°F?"
+"What color is your urine?"
+"Is the amount of urine in the last 12 hours a lot less than your usual amount?"
+"Are you very thirsty?"
+"Are you lightheaded?"
+"Are you able to perform self care activities?"
+reason: "OncoLifeAlerts.docx: Nausea rated as severe despite medications"
+
+
+
+Vomiting
+
+id: ALERT_VOMITING_EPISODES
+symptom: vomiting
+when: episodes_per_24h >= 6
+override_to_grade: 3
+long_q_ids:
+
+"Do you have abdominal pain or cramping?"
+"Are you constipated?"
+"How many bowel movements do you have a day?"
+"Do you have diarrhea?"
+"Has your vomiting affected your ability to do daily household work?"
+"Are you able to perform daily self care like bathing and dressing yourself?"
+reason: "OncoLifeAlerts.docx: More than 6 episodes in 24 h"
+
+
+id: ALERT_VOMITING_NO_INTAKE
+symptom: vomiting
+when: oral_intake_pct == 0
+override_to_grade: 3
+long_q_ids: # same as above
+
+"Do you have abdominal pain or cramping?"
+"Are you constipated?"
+"How many bowel movements do you have a day?"
+"Do you have diarrhea?"
+"Has your vomiting affected your ability to do daily household work?"
+"Are you able to perform daily self care like bathing and dressing yourself?"
+reason: "OncoLifeAlerts.docx: No oral intake over the last 12 h"
+
+
+id: ALERT_VOMITING_SEVERE
+symptom: vomiting
+when: vomiting_rating == "severe"
+override_to_grade: 3
+long_q_ids: # same as above
+
+"Do you have abdominal pain or cramping?"
+"Are you constipated?"
+"How many bowel movements do you have a day?"
+"Do you have diarrhea?"
+"Has your vomiting affected your ability to do daily household work?"
+"Are you able to perform daily self care like bathing and dressing yourself?"
+reason: "OncoLifeAlerts.docx: Severe vomiting despite medications"
+
+
+id: ALERT_VOMITING_MOD3
+symptom: vomiting
+when: vomiting_rating == "moderate" and days_in_a_row >= 3
+override_to_grade: 3
+long_q_ids: # same as above
+
+"Do you have abdominal pain or cramping?"
+"Are you constipated?"
+"How many bowel movements do you have a day?"
+"Do you have diarrhea?"
+"Has your vomiting affected your ability to do daily household work?"
+"Are you able to perform daily self care like bathing and dressing yourself?"
+reason: "OncoLifeAlerts.docx: Moderate vomiting over 3 continuous days"
+
+
+
+Diarrhea
+
+id: ALERT_DIARRHEA_FREQUENCY
+symptom: diarrhea
+when: loose_stools_per_day > 5
+override_to_grade: 3
+long_q_ids:
+
+"Are you able to perform daily self-care activities?"
+"Has the diarrhea affected your ability to do daily activities such as household work, eating, moving around?"
+"Any fever > 100.4°F?"
+"Any nausea? Any vomiting?"
+"What color is your urine?"
+"Is urine amount a lot less over the last 12 h?"
+"Are you very thirsty or lightheaded?"
+reason: "OncoLifeAlerts.docx: >5 loose stools per day"
+
+
+id: ALERT_DIARRHEA_PAIN
+symptom: diarrhea
+when: abdominal_pain_severity in ["moderate","severe"]
+override_to_grade: 3
+long_q_ids: # same as above
+
+"Are you able to perform daily self-care activities?"
+"Has the diarrhea affected your ability to do daily activities such as household work, eating, moving around?"
+"Any fever > 100.4°F?"
+"Any nausea? Any vomiting?"
+"What color is your urine?"
+"Is urine amount a lot less over the last 12 h?"
+"Are you very thirsty or lightheaded?"
+reason: "OncoLifeAlerts.docx: Moderate/severe abdominal pain or cramping"
+
+
+id: ALERT_DIARRHEA_BLOOD
+symptom: diarrhea
+when: stool_contains in ["black","bloody","mucus"] or dehydration == true
+override_to_grade: 3
+long_q_ids: # same as above
+
+"Are you able to perform daily self-care activities?"
+"Has the diarrhea affected your ability to do daily activities such as household work, eating, moving around?"
+"Any fever > 100.4°F?"
+"Any nausea? Any vomiting?"
+"What color is your urine?"
+"Is urine amount a lot less over the last 12 h?"
+"Are you very thirsty or lightheaded?"
+reason: "OncoLifeAlerts.docx: Black, bloody, mucus in stool or dehydration"
+
+
+id: ALERT_DIARRHEA_NO_INTAKE
+symptom: diarrhea
+when: oral_intake_pct <= 10
+override_to_grade: 3
+long_q_ids: # same as above
+
+"Are you able to perform daily self-care activities?"
+"Has the diarrhea affected your ability to do daily activities such as household work, eating, moving around?"
+"Any fever > 100.4°F?"
+"Any nausea? Any vomiting?"
+"What color is your urine?"
+"Is urine amount a lot less over the last 12 h?"
+"Are you very thirsty or lightheaded?"
+reason: "OncoLifeAlerts.docx: Almost nothing or nothing for oral intake"
+
+
+id: ALERT_DIARRHEA_MOD3
+symptom: diarrhea
+when: diarrhea_severity == "moderate" and days_in_a_row >= 3
+override_to_grade: 3
+long_q_ids: # same as above
+
+"Are you able to perform daily self-care activities?"
+"Has the diarrhea affected your ability to do daily activities such as household work, eating, moving around?"
+"Any fever > 100.4°F?"
+"Any nausea? Any vomiting?"
+"What color is your urine?"
+"Is urine amount a lot less over the last 12 h?"
+"Are you very thirsty or lightheaded?"
+reason: "OncoLifeAlerts.docx: Moderate diarrhea over 3 continuous days"
+
+
+
+Bleeding/Bruising
+
+id: ALERT_BLEEDING_PRESSURE
+symptom: bleeding
+when: bleeding_persists_after_pressure == true
+override_to_grade: 4
+long_q_ids: []
+reason: "OncoLifeAlerts.docx: Bleeding that doesn't stop after applying pressure"
+id: ALERT_BLOOD_IN_STOOL_OR_URINE
+symptom: bleeding
+when: blood_in_stool == true or blood_in_urine == true
+override_to_grade: 4
+long_q_ids: []
+reason: "OncoLifeAlerts.docx: Blood in stool or urine"
+
+Fatigue
+
+id: ALERT_FATIGUE_INTERFERENCE
+symptom: fatigue
+when: fatigue_interferes_with_adl == true
+override_to_grade: 3
+long_q_ids:
+
+"How many hours are you sleeping/spending in bed each day due to fatigue?"
+"Has the fatigue affected your ability to bathe, dress, or feed yourself without help?"
+"Do you have fever, nausea, vomiting, diarrhea, or lack of appetite?"
+reason: "OncoLifeAlerts.docx: Fatigue significantly interferes with daily activities"
+
+
+id: ALERT_FATIGUE_SEVERE
+symptom: fatigue
+when: fatigue_severity == "severe"
+override_to_grade: 3
+long_q_ids: # same as above
+
+"How many hours are you sleeping/spending in bed each day due to fatigue?"
+"Has the fatigue affected your ability to bathe, dress, or feed yourself without help?"
+"Do you have fever, nausea, vomiting, diarrhea, or lack of appetite?"
+reason: "OncoLifeAlerts.docx: Severe fatigue rating"
+
+
+id: ALERT_FATIGUE_MOD3
+symptom: fatigue
+when: fatigue_severity == "moderate" and days_in_a_row >= 3
+override_to_grade: 3
+long_q_ids: # same as above
+
+"How many hours are you sleeping/spending in bed each day due to fatigue?"
+"Has the fatigue affected your ability to bathe, dress, or feed yourself without help?"
+"Do you have fever, nausea, vomiting, diarrhea, or lack of appetite?"
+reason: "OncoLifeAlerts.docx: Moderate fatigue lasting 3 or more days"
+
+
+
+Eye Complaints
+
+id: ALERT_EYE_TASK_INTERFERENCE
+symptom: eye_complaints
+when: interferes_with_daily_tasks == true
+override_to_grade: 3
+long_q_ids:
+
+"Have you consulted an eye doctor regarding your symptoms?"
+reason: "OncoLifeAlerts.docx: Eye symptoms interfere with daily tasks"
+
+
+id: ALERT_EYE_SEVERE
+symptom: eye_complaints
+when: eye_severity == "severe" or vision_problem == "double vision"
+override_to_grade: 3
+long_q_ids: # same as above
+
+"Have you consulted an eye doctor regarding your symptoms?"
+reason: "OncoLifeAlerts.docx: Severe rating or double vision"
+
+
+id: ALERT_EYE_MOD3
+symptom: eye_complaints
+when: eye_severity == "moderate" and days_in_a_row >= 3
+override_to_grade: 3
+long_q_ids: # same as above
+
+"Have you consulted an eye doctor regarding your symptoms?"
+reason: "OncoLifeAlerts.docx: Moderate eye symptoms over 3 days"
+
+
+
+Mouth Sores
+
+id: ALERT_MOUTH_INTAKE
+symptom: mouth_sores
+when: oral_intake_pct <= 10
+override_to_grade: 3
+long_q_ids:
+
+"Are your mouth sores causing pain or difficulty swallowing?"
+"How many days have you not had normal food and/or drink?"
+"Assess for dehydration"
+reason: "OncoLifeAlerts.docx: Oral intake 'almost nothing' or 'nothing'"
+
+
+id: ALERT_MOUTH_PAIN
+symptom: mouth_sores
+when: mouth_pain_severity == "severe"
+override_to_grade: 3
+long_q_ids: # same as above
+
+"Are your mouth sores causing pain or difficulty swallowing?"
+"How many days have you not had normal food and/or drink?"
+"Assess for dehydration"
+reason: "OncoLifeAlerts.docx: Severe mouth pain despite medication"
+
+
+id: ALERT_MOUTH_MOD3
+symptom: mouth_sores
+when: mouth_pain_severity == "moderate" and days_in_a_row >= 3
+override_to_grade: 3
+long_q_ids: # same as above
+
+"Are your mouth sores causing pain or difficulty swallowing?"
+"How many days have you not had normal food and/or drink?"
+"Assess for dehydration"
+reason: "OncoLifeAlerts.docx: Moderate mouth sores over 3 days"
+
+
+
+No Appetite
+
+id: ALERT_WEIGHT_LOSS
+symptom: no_appetite
+when: weight_loss_pct >= 2
+override_to_grade: 3
+long_q_ids:
+
+"Are you experiencing difficulty swallowing?"
+"Assess for dehydration?"
+"Are you hungry?"
+reason: "OncoLifeAlerts.docx: Weight loss ≥2% in one week"
+
+
+id: ALERT_APPETITE_INTAKE
+symptom: no_appetite
+when: oral_intake_pct <= 10
+override_to_grade: 3
+long_q_ids: # same as above
+
+"Are you experiencing difficulty swallowing?"
+"Assess for dehydration?"
+"Are you hungry?"
+reason: "OncoLifeAlerts.docx: Oral intake 'almost nothing' or 'nothing'"
+
+
+id: ALERT_APPETITE_SWALLOW
+symptom: no_appetite
+when: difficulty_swallowing == true
+override_to_grade: 3
+long_q_ids: # same as above
+
+"Are you experiencing difficulty swallowing?"
+"Assess for dehydration?"
+"Are you hungry?"
+reason: "OncoLifeAlerts.docx: Difficulty swallowing"
+
+
+
+Constipation
+
+id: ALERT_CONSTIPATION_NONE
+symptom: constipation
+when: days_since_bm > 2
+override_to_grade: 3
+long_q_ids:
+
+"Are you experiencing abdominal pain or vomiting?"
+"Have you taken any stool softeners or medications for constipation? Which ones?"
+"Assess for dehydration"
+reason: "OncoLifeAlerts.docx: No bowel movement for more than 2 days"
+
+
+
+Urinary Problems
+
+id: ALERT_URINARY_OUTPUT_CHANGE
+symptom: urinary_problems
+when: urine_output_changed == true
+override_to_grade: 3
+long_q_ids:
+
+"Is there an odor to the urine?"
+"Are you drinking fluids normally?"
+"Are you diabetic? If yes, what is your blood sugar running?"
+"Are you able to perform daily self-care activities like bathing and dressing yourself?"
+reason: "OncoLifeAlerts.docx: Significant change in urine amount"
+
+
+id: ALERT_URINARY_PAIN
+symptom: urinary_problems
+when: pelvic_pain == true or urine_blood == true or urination_burning_severity in ["moderate","severe"]
+override_to_grade: 3
+long_q_ids: # same as above
+
+"Is there an odor to the urine?"
+"Are you drinking fluids normally?"
+"Are you diabetic? If yes, what is your blood sugar running?"
+"Are you able to perform daily self-care activities like bathing and dressing yourself?"
+reason: "OncoLifeAlerts.docx: Pelvic pain, blood in urine, or moderate/severe burning sensation"
+
+
+
+Skin Rash or Redness
+
+id: ALERT_RASH_INFUSION_SITE
+symptom: skin_rash
+when: (rash_location == "infusion_site" and (rash_swelling == true or blistering == true or redness == true or open_wound == true or fever_present == true or chills == true))
+override_to_grade: 3
+long_q_ids:
+
+"How many days have you had it?"
+"If more than 1, is it getting worse?"
+"Select all that apply: Currently feeling unwell, broken or cracked skin, any liquid coming from the rash or infusion site, Swelling or warm to touch"
+reason: "OncoLifeAlerts.docx: Infusion site rash with complicating features"
+
+
+id: ALERT_RASH_GENERAL
+symptom: skin_rash
+when: (rash_location != "infusion_site" and (adl_interference == true or temp_f > 100.4 or body_coverage_pct > 30))
+override_to_grade: 3
+long_q_ids: # same as above
+
+"How many days have you had it?"
+"If more than 1, is it getting worse?"
+"Select all that apply: Currently feeling unwell, broken or cracked skin, any liquid coming from the rash or infusion site, Swelling or warm to touch"
+reason: "OncoLifeAlerts.docx: General rash affecting ADLs, fever >100.4°F, or covering >30% of body"
+
+
+
+Pain
+
+id: ALERT_PAIN_CHEST
+symptom: pain
+when: chest_pain == true
+override_to_grade: 4
+long_q_ids: []
+reason: "OncoLifeAlerts.docx: Chest pain -- immediate alert"
+id: ALERT_PAIN_ADL
+symptom: pain
+when: pain_severity in ["moderate","severe"] and interferes_with_adl == true
+override_to_grade: 3
+long_q_ids:
+
+"Any headache, double vision, abdominal pain, vomiting, bloody or black stool?"
+"Is the pain getting worse?"
+"Any numbness or tingling of arms or legs?"
+"Do you have trouble keeping balance or walking?"
+"Did you get neulasta within the last 3 days?"
+"Is the pain affecting your ability to sleep or rest?"
+"If pain around IV/port site: is there swelling, blistering, redness or an open wound?"
+"Do you have chills?"
+reason: "OncoLifeAlerts.docx: Moderate/severe pain interfering with ADLs"
+
+
+id: ALERT_PAIN_FEVER
+symptom: pain
+when: temp_f > 100.4
+override_to_grade: 3
+long_q_ids: # same as above
+
+"Any headache, double vision, abdominal pain, vomiting, bloody or black stool?"
+"Is the pain getting worse?"
+"Any numbness or tingling of arms or legs?"
+"Do you have trouble keeping balance or walking?"
+"Did you get neulasta within the last 3 days?"
+"Is the pain affecting your ability to sleep or rest?"
+"If pain around IV/port site: is there swelling, blistering, redness or an open wound?"
+"Do you have chills?"
+reason: "OncoLifeAlerts.docx: Fever >100.4°F with pain"
+
+
+
+Swelling
+
+id: ALERT_SWELLING_UNILATERAL
+symptom: swelling
+when: swelling_location == "one_leg"
+override_to_grade: 3
+long_q_ids:
+
+"Are you experiencing shortness of breath along with the swelling?"
+"Do you have a history of blood clots?"
+reason: "OncoLifeAlerts.docx: Swelling in one leg -- possible DVT"
+
+
+id: ALERT_SWELLING_PAIN
+symptom: swelling
+when: swelling_redness == true or swelling_pain_severity in ["moderate","severe"]
+override_to_grade: 3
+long_q_ids: # same as above
+
+"Are you experiencing shortness of breath along with the swelling?"
+"Do you have a history of blood clots?"
+reason: "OncoLifeAlerts.docx: Swelling with redness or moderate/severe pain"
+
+
+
+Cough
+
+id: ALERT_COUGH_URGENT
+symptom: cough
+when: chest_pain == true or shortness_of_breath == true
+override_to_grade: 4
+long_q_ids: []
+reason: "OncoLifeAlerts.docx: Chest pain or SOB with cough -- immediate alert"
+id: ALERT_COUGH_ACTIVITY
+symptom: cough
+when: cough_prevents_adl == true
+override_to_grade: 3
+long_q_ids: []
+reason: "OncoLifeAlerts.docx: Cough prevents daily activities"
+id: ALERT_COUGH_FEVER_OR_SPO2
+symptom: cough
+when: temp_f > 100.4 or spo2 < 92
+override_to_grade: 3
+long_q_ids: []
+reason: "OncoLifeAlerts.docx: Fever >100.4°F or SpO₂ <92% with cough"
+
+Neuropathy
+
+id: ALERT_NEUROPATHY_SEVERE
+symptom: neuropathy
+when: neuropathy_severity == "severe"
+override_to_grade: 3
+long_q_ids:
+
+"Is neuropathy affecting your ability to perform daily tasks such as buttoning your shirt, typing, turning pages, or walking long distances?"
+"Has the numbness or tingling gotten worse or moved higher up your limbs?"
+"Have you had trouble feeling the ground when walking or felt unsteady?"
+reason: "OncoLifeAlerts.docx: Severe neuropathy indication"
+
+
+id: ALERT_NEUROPATHY_ADL
+symptom: neuropathy
+when: interferes_with_adl == true
+override_to_grade: 3
+long_q_ids: # same as above
+
+"Is neuropathy affecting your ability to perform daily tasks such as buttoning your shirt, typing, turning pages, or walking long distances?"
+"Has the numbness or tingling gotten worse or moved higher up your limbs?"
+"Have you had trouble feeling the ground when walking or felt unsteady?"
+reason: "OncoLifeAlerts.docx: Neuropathy interferes with ADLs"
+
+
+id: ALERT_NEUROPATHY_MOD3
+symptom: neuropathy
+when: neuropathy_severity == "moderate" and days_in_a_row >= 3
+override_to_grade: 3
+long_q_ids: # same as above
+
+"Is neuropathy affecting your ability to perform daily tasks such as buttoning your shirt, typing, turning pages, or walking long distances?"
+"Has the numbness or tingling gotten worse or moved higher up your limbs?"
+"Have you had trouble feeling the ground when walking or felt unsteady?"
+reason: "OncoLifeAlerts.docx: Moderate neuropathy over 3 consecutive days"

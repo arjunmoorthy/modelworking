@@ -1,0 +1,404 @@
+Chemotherapy Symptom Monitoring Chatbot Documentation
+
+Overview
+This document outlines the structure and functionality of the chemotherapy symptom monitoring chatbot, detailing how each symptom is individually assessed through comprehensive short screening questions, clearly defined alert criteria, and detailed follow-up questions.
+If an alert is reached, all long questions are asked, along with a recommendation message to call the provider and an option to view educational content.
+
+Logic
+Same day alert = Long questions, recommendation to provider
+Moderate for 3 days on symptoms where question asked to patient = Long questions, recommendation to provider
+
+Community Questions
+This question will only appear to patients who report symptoms where the questions commonly impact daily functioning (e.g., fatigue, diarrhea, pain, neuropathy, or other disruptive symptoms).
+"Are you experiencing difficulty performing daily activities, such as personal care, household tasks, eating, moving around, or managing your medications?"
+
+If yes, "Which of your current symptoms are causing this difficulty?"
+
+Immediate Alert Symptoms
+Trouble Breathing & Chest Pain & Significant Bleeding what won't stop with pressure
+
+Immediate Alert Message: "Call 911 or your care team immediately at your discretion."
+
+Assess for dehydration = What color is your urine? Is the amount of urine a lot less over the last 12 hours? Are you very thirsty or lightheaded? Do you know what your heart rate and blood pressure is? If so, please state. ALERT if HR>100 or systolic bp <100
+
+Individual Symptom Monitoring
+
+Fever
+
+Short Questions:
+"What is your temperature? If your temperature is greater than 100.4°F, please specify."
+"Have you taken fever-reducing medications today?"
+
+If yes, "What medication did you take and how often did you take it?"
+
+Alert Criteria: Fever greater than 100.4°F once or sustained above 100.4°F for more than 1 hour.
+
+Long Questions:
+"Are you having any trouble breathing?" (If yes, should prompt for trouble breathing)
+Select all that you are currently experiencing: Rapid heartbeat example is your heart rate above 100, nausea, vomiting, abdominal pain, diarrhea, redness around the port, cough? -- I'm assuming this should prompt for those symptoms if yes*
+Do you feel: dizzy, confused, or experience burning on urination (Select all that apply)
+How much have you been able to eat or drink in the last 24 hours? Select the closest that applies: About the same as usual, less than half of what I normally eat or drink, Almost nothing --- just a few bites or sips, I haven't eaten or had anything to drink
+Are you able to perform daily self care like bathing and dressing yourself?
+
+Nausea
+
+Short Questions:
+"How many days have you been nauseated? trigger if this symptom has not been logged the day before"
+"How much have you been able to eat or drink in the last 24 hours?" Select the closest that applies:
+About the same as usual, Less than half of what I normally eat or drink, Almost nothing --- just a few bites or sips, I haven't eaten or had anything to drink
+Are you taking anti-nausea meds?
+
+If yes, what medication did you take and how often?
+
+"Rate your nausea severity after taking medication (if taken): mild, moderate, or severe."
+
+Alert Criteria (OR)
+24 hour intake rated as "Almost nothing" OR "nothing"
+Nausea rated as severe despite taking the prescribed anti nausea medications
+
+Long Questions:
+"Have you vomited in the last 24 hours?
+
+If so, how many times?"
+
+"Are you experiencing abdominal pain or cramping?"
+Any weight loss?
+Any fever > 100.4
+What color is your urine
+Is the amount of urine in the last 12 hours a lot less than your usual amount?
+Are you very thirsty?
+Are you lightheaded?
+Are you able to perform self care activities?
+
+Vomiting
+
+Short Questions:
+"How many days have you been vomiting? trigger if not logged the day before"
+"How many times have you vomited in the last 24 hours?"
+"How much have you been able to eat or drink in the last 12 hours?" Select the closest that applies: About the same as usual, Less than half of what I normally eat or drink, Almost nothing --- just a few bites or sips, I haven't eaten or had anything to drink
+"Are you taking medication for vomiting as prescribed? Rate your vomiting as mild, moderate, or severe after taking medications."
+"If moderate over 3 days, state: You've had this symptom for a few days. Are your medications resulting in the symptom getting worse, staying the same, or improving?"
+
+Alert Criteria (OR)
+More than 6 episodes in 24 hours
+No oral intake over the last 12 hours
+Rating of severe despite taking anti-nausea medications
+Moderate over 3 continuous days
+
+Long Questions:
+"Do you have abdominal pain or cramping?"
+Are you constipated?
+
+How many bowel movements do you have a day?
+
+Do you have diarrhea?
+
+How many bowel movements are you having a day?
+
+Has your vomiting affected your ability to do daily household work?
+Are you able to perform daily self care like bathing and dressing yourself?
+
+Diarrhea
+
+Short Questions:
+"How many days have you had diarrhea? trigger if not logged the day before"
+"How many loose stools have you had in the last 24 hours?"
+"Do you have abdominal pain or cramping?"
+
+Rate as mild, moderate or severe
+
+Is your stool: Black, Bloody, Contains mucus, normal, other (select all)
+
+If other, describe your stool
+
+Have you taken anti diarrhea medications as prescribed
+
+What did you take and how often?
+
+"How much have you been able to eat or drink in the last 12 hours?" Select the closest that applies: About the same as usual, Less than half of what I normally eat or drink, Almost nothing --- just a few bites or sips, I haven't eaten or had anything to drink
+"Rate your diarrhea as mild, moderate, or severe after medications"
+"If moderate over 3 days, state: You've had this symptom for a few days. Are your medications resulting in the symptom getting worse, staying the same, or improving?"
+
+Alert Criteria:
+More than 5 loose stools per day or moderate/severe rating.
+Moderate/Severe abdominal pain or cramping
+Black or bloody or mucus in stool or dehydration
+Almost nothing or nothing for oral intake
+Rating of severe despite taking anti-nausea medications
+Moderate over 3 continuous days
+
+Long Questions:
+"Are you able to perform daily self-care activities? (ex. Person hygiene, dressing, managing medications)? -- community question
+Has the diarrhea affected your ability to do daily activities such as household work, eating, moving around?
+Any fever > 100.4
+Any nausea? Any vomiting?
+What color is urine?
+Is urine amount a lot less over the last 12 hours?
+Are you very thirsty or lightheaded?
+
+Bleeding/Bruising
+
+Short Questions:
+"Are you experiencing bleeding that won't stop after applying pressure?"
+"Do you have a lot of blood in your stool or urine?"
+"Did you injure yourself?"
+Are you on blood thinners (examples are Xarelto, eliquis, coumadin, or plavix)?
+Is the bruising in one area of your body or all over?
+
+Alert Criteria:
+Bleeding that doesn't stop after applying pressure
+Blood in stool or urine
+
+No long questions
+
+Fatigue
+
+Short Questions:
+"How many days have you been experiencing fatigue? Trigger if not logged the day before"
+"Is your fatigue interfering with daily activities like household chores or work?" (Community Question)
+"Rate your fatigue severity: mild, moderate, or severe."
+If moderate over 3 days, state: You've had this symptom for a few days. Is your fatigue getting worse, staying the same, or improving?"
+
+Alert Criteria:
+Fatigue that significantly interferes with daily activities
+Severe fatigue rating
+Moderate fatigue lasting 3 or more days
+
+Long Questions (triggered by alert):
+"How many hours are you sleeping/spending in bed each day due to fatigue?"
+"Has the fatigue affected your ability to bathe, dress, or feed yourself without help?
+"Do you have fever, nausea, vomiting, diarrhea, or lack of appetite?
+
+Eye Complaints
+
+Short Questions:
+"Are your eye symptoms new?"
+"Are you experiencing pain?"
+"Is there discharge or excessive tearing from your eyes?"
+Are you experiencing any new problems with your vision?
+
+Select all that apply: blurry vision, double vision, other
+
+Has it interfered with your ability to perform daily tasks like reading, driving, or working on a computer?
+Rate your symptoms mild, moderate or severe
+If moderate over 3 days, state: You've had this symptom for a few days. Is this symptom (fill in the blank) getting worse, staying the same, or improving?"
+
+Alert Criteria:
+Interference with performing daily tasks mentioned in question
+Rating of severe or double vision
+Moderate over 3 days
+
+Long Questions (triggered by alert):
+"Have you consulted an eye doctor regarding your symptoms?"
+
+Mouth Sores
+
+Short Questions:
+"Are you experiencing pain in your mouth?"
+"How much have you been able to eat or drink in the last 24 hours?" Select the closest that applies: About the same as usual, Less than half of what I normally eat or drink, Almost nothing --- just a few bites or sips, I haven't eaten or had anything to drink
+Rate the mouth sores as mild, moderate or severe after taking medications (if taken)?
+Do you have a fever?
+If moderate over 3 days, state: You've had this symptom for a few days. Is this symptom (fill in the blank) getting worse, staying the same, or improving with medication?
+
+Alert Criteria:
+If oral intake over last 24 hours is almost nothing, or nothing
+Severe pain despite medication
+Moderate over 3 days
+
+Long Questions (triggered by alert):
+"Are your mouth sores causing pain or difficulty swallowing?"
+How many days have you not had normal food and/or drink? (if new symptom)
+Assess for dehydration
+
+No Appetite
+
+Short Questions:
+"Have you experienced weight loss recently (defined by more than 2% of body weight in one week)?
+
+If yes, how much weight have you lost in pounds?"
+What is your weight one week ago versus today?
+
+"How much have you been able to eat or drink in the last 2 days?" Select the closest that applies: About the same as usual, Less than half of what I normally eat or drink, Almost nothing --- just a few bites or sips, I haven't eaten or had anything to drink
+
+Alert Criteria:
+Significant weight loss (over 3 pounds in a week or 2% in a week -- we will have to build that formula in as Weight Loss % = = [(Baseline -- Current) / Baseline] × 100.)
+Intake rated as Almost nothing or nothing
+Difficulty swallowing
+
+Long Questions (triggered by alert):
+"Are you experiencing difficulty swallowing?"
+Select all that apply: diarrhea, constipation, mouth sores, nausea, vomiting, none of the above
+"Assess for dehydration?"
+"Are you hungry?"
+
+Constipation
+
+Short Questions:
+"How many days has it been since you had a bowel movement,
+What is the normal amount for you?
+Are you passing gas?
+
+Alert Criteria:
+No bowel movement for more than 2 days
+
+Long Questions (triggered by alert):
+"Are you experiencing abdominal pain or vomiting?"
+"Have you taken any stool softeners or medications for constipation?
+
+Which ones?
+
+Assess for dehydration
+
+Urinary Problems
+
+Short Questions:
+"Has the amount of urine that you have been outputting been drastically reduced?"
+Is there an increase in how many times you are urinating?
+"Are you experiencing any burning sensation during urination?"
+
+Rate as mild, moderate or severe
+
+"Do you have pelvic pain from urination?"
+"Have you noticed any blood in your urine?"
+
+Alert Criteria:
+Significant change in urine amount (greatly reduced or increased)
+Any pelvic pain
+Presence of blood in urine
+Moderate or Severe pain or burning during urination
+
+Long Questions (triggered by alert):
+"Is there an odor to the urine?"
+"Are you drinking fluids normally?"
+"Are you diabetic? If yes, what is your blood sugar running?
+"Are you able to perform daily self-care activities like bathing and dressing yourself?" (Community Question)
+
+Skin Rash or Redness
+
+Short Questions:
+"Where is the rash located?" Select all that apply: Face, Chest, Arms, Legs, Hands/feet, infusion site, other
+
+If other, where is the site
+If the rash is at the infusion site, is there swelling, blistering, redness or an open wound? Also, do you have fevers, chills?
+All other sites (not infusion site) where the rash is there --
+
+Does it cover more than 30% of your body?
+Has it affected my ability to do daily activities such as household work, eating, moving around? (community question?)
+What is your temperature?
+
+Alert Criteria:
+If infusion site has swelling, blistering, redness, open wound, fevers or chills,
+All other sites -- if activity of daily living affected or temperature > 100.4
+Covers more than 30% of body
+
+Long Questions (triggered by alert):
+How many days have you had it?
+
+If more than 1, is it getting worse?
+
+Select all that apply: Currently feeling unwell, broken or cracked skin, any liquid coming from the rash or infusion site, Swelling or warm to touch
+
+Pain
+
+Short Questions:
+"Where is your pain located? Please select all areas that apply: chest, hands or feet, mouth or throat, muscles or joints, headache, abdomen (stomach), bones or back, IV/port site, other location."
+
+If other location, where?
+
+"Rate your pain severity: mild, moderate, or severe."
+Does it interfere with daily activities?
+Do you have a fever over 100.4?
+
+Alert Criteria:
+If chest pain -- stop and ask to call provider/911
+If rated moderate/severe and interferes with daily activities OR if severe at interferes with daily activities
+If the fever is over 100.4
+
+Long Questions (triggered by alert):
+Any headache, double vision, abdominal pain, vomiting, bloody, black stool?
+Is the pain getting worse?
+Any numbness of tingling or arms or legs?
+Do you have trouble keeping balance or walking?
+Did you get neulasta within the last 3 days?
+"Is the pain affecting your ability to sleep or rest?"
+If pain around IV site or port site?
+
+Is there swelling, blistering, redness or an open wound?
+Do you have chills?
+
+Swelling
+
+Short Questions:
+"Describe the location of your swelling: Select one of the following: both legs, one leg, other
+
+If other, where is the swelling?
+
+When did the swelling start? -- If new symptom
+"Are you experiencing redness, or pain in the swollen area?"
+"Rate your symptoms as mild, moderate or severe?"
+
+Alert Criteria:
+Swelling located in only one leg
+If redness or pain
+Moderate or severe symptom rating
+
+Long Questions (triggered by alert):
+"Are you experiencing shortness of breath along with the swelling?"
+Do you have a history of blood clots?
+
+Only ask once -- and if no -- then save it and don't ask again
+
+Cough
+
+Short Questions:
+"How many days have you had a cough? Trigger if not logged the day before."
+What is your temperature?
+"Is your cough producing mucus?"
+
+If yes, "What color is the mucus? Clear, yellow, green, or bloody?"
+
+What medications have you used to help with your cough?
+
+Is it helping?
+
+Does the cough prevent you from doing daily activities such as household work, eating, moving around?
+"Are you experiencing chest pain or shortness of breath with your cough?"
+Do you have the ability to check your oxygen saturation at home?
+
+If so, what is it?
+
+Alert Criteria:
+If chest pain or shortness of breath then alert to call 911/care team
+If cough prevents daily activities
+If temperature > 100.4
+Or Oxygen saturation < 92%
+
+No long questions
+
+Neuropathy
+
+Short Questions:
+"How long have you had numbness, tingling, or weakness in your hands or feet? Trigger if not logged the day before."
+Does the numbness/tingling interfere with normal acitivites?
+"Rate your neuropathy severity as mild, moderate, or severe."
+
+Alert Criteria:
+Severe neuropathy indication
+If numbness/tingling interferes with normal activities
+Moderate neuropathy lasting 3 or more consecutive days
+
+Long Questions (triggered by alert):
+"Is neuropathy affecting your ability to perform daily tasks such as buttoning your shirt, type, turn pages in a book or magazine, or walk long distances because of the tingling or numbness?
+Has the numbness or tingling gotten worse in the past week or started to move higher up your arms or legs?
+Have you had trouble feeling the ground when walking, or felt unsteady or off balance?
+
+After summary that goes through symptoms and the patient has the option to add something and they say no.
+
+Then say " Today isn't one of the scheduled days when your symptom summary is automatically sent to your oncology team. It is recommended you call your care team.
+After the conversation and no alert-Would you like some brief guidance on how to manage what you're experiencing?
+
+Multi-Day Symptom Tracking
+Symptoms rated as "moderate" for 3 or more consecutive days trigger a recommendation to contact the care team.
+
+Patient Guidance and Care Team Communication
+"Review your symptom summary. For alerts, immediately contact your care team or call 911 for urgent symptoms."
