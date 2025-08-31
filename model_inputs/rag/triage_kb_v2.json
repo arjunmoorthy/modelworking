@@ -285,7 +285,7 @@
           "phase_hint": "long",
           "concept_id": "antidiarrheal_taken",
           "utility": {
-            "base_info_gain": 0.6,
+            "base_info_gain": 1.0,
             "burden_cost": 0.15
           },
           "fallback_template": {
@@ -1075,7 +1075,7 @@
           "phase_hint": "long",
           "concept_id": "constipation_context",
           "utility": {
-            "base_info_gain": 0.3,
+            "base_info_gain": 1.0,
             "burden_cost": 0.15
           },
           "fallback_template": {
@@ -1420,7 +1420,7 @@
           "phase_hint": "long",
           "concept_id": "uti_cluster",
           "utility": {
-            "base_info_gain": 0.6,
+            "base_info_gain": 1.0,
             "burden_cost": 0.15
           },
           "fallback_template": {
@@ -1645,7 +1645,7 @@
           "phase_hint": "short",
           "concept_id": "treatment_failure_cluster",
           "utility": {
-            "base_info_gain": 0.9,
+            "base_info_gain": 1.0,
             "burden_cost": 0.1
           },
           "fallback_template": {

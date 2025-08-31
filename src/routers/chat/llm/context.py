@@ -53,7 +53,11 @@ class ContextLoader:
         # Load text files from context folder
         text_files = [
             "oncolife_alerts_configuration.txt",
-            "oncolifebot_instructions.txt", 
+            "agent1_orchestrator",
+            "agent2_triage_agent",
+            "agent3_info_gain",
+            "agent4_response_writer",
+            "agent5_summary",
             "written_chatbot_docs.txt"
         ]
         

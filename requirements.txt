@@ -18,3 +18,4 @@ pytz
 sentence_transformers
 pinecone
 redis
+reportlab
